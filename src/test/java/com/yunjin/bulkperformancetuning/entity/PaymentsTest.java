@@ -33,21 +33,19 @@ class PaymentsTest {
     private PaymentsBulkRepository paymentsBulkRepository;
 
     //@Test
-    @DisplayName("identity 전략 jpa save 단건 성공")
-    void identity_jpa_save_단건() {
-
+    @DisplayName("jpa identity 전략 save 단건 성공")
+    void jpa_identity_save_single() {
         Payments payments = Payments.builder()
             .orderId((long) COUNT)
             .amount(BigDecimal.valueOf(COUNT))
             .build();
 
         paymentsRepository.save(payments);
-
     }
 
     @Test
-    @DisplayName("identity 전략 jpa save 다건 성공")
-    void identity_jpa_save_다건() {
+    @DisplayName("jpa identity 전략 save 다건 성공")
+    void jpa_identity_save_multiple() {
         long startTime = System.currentTimeMillis();
 
         for (int i = 0; i < COUNT; i++) {
@@ -57,17 +55,12 @@ class PaymentsTest {
                 .build();
             paymentsRepository.save(payments);
         }
-
-        long endTime = System.currentTimeMillis();
-        double elapsedTime = (double) (endTime - startTime) / 1000.0;
-        System.out.println("---------------------------------");
-        System.out.printf("수행시간 : %f %s\n", elapsedTime, "(초)");
-        System.out.println("---------------------------------");
+        printElapsedTime(startTime);
     }
 
     @Test
-    @DisplayName("identity 전략 jpa saveAll 성공, batch insert 비활성화")
-    void identity_jpa_saveAll() {
+    @DisplayName("jpa identity 전략 saveAll 성공, batch insert 비활성화")
+    void jpa_identity_saveAll() {
         long startTime = System.currentTimeMillis();
 
         List<Payments> paymentsList = new ArrayList<>();
@@ -78,19 +71,14 @@ class PaymentsTest {
                 .build();
             paymentsList.add(payments);
         }
-
         paymentsRepository.saveAll(paymentsList);
 
-        long endTime = System.currentTimeMillis();
-        double elapsedTime = (double) (endTime - startTime) / 1000.0;
-        System.out.println("---------------------------------");
-        System.out.printf("수행시간 : %f %s\n", elapsedTime, "(초)");
-        System.out.println("---------------------------------");
-
+        printElapsedTime(startTime);
     }
+
     @Test
-    @DisplayName("uuid 전략 jpa saveAll 성공, batch insert 활성화")
-    void uuid_jpa_saveAll() {
+    @DisplayName("jpa uuid 전략 saveAll 성공, batch insert 활성화")
+    void jpa_uuid_saveAll() {
         long startTime = System.currentTimeMillis();
 
         List<Payments2> payments2List = new ArrayList<>();
@@ -101,20 +89,14 @@ class PaymentsTest {
                 .build();
             payments2List.add(payments2);
         }
-
         payments2Repository.saveAll(payments2List);
 
-        long endTime = System.currentTimeMillis();
-        double elapsedTime = (double) (endTime - startTime) / 1000.0;
-        System.out.println("---------------------------------");
-        System.out.printf("수행시간 : %f %s\n", elapsedTime, "(초)");
-        System.out.println("---------------------------------");
-
+        printElapsedTime(startTime);
     }
 
     @Test
-    @DisplayName("identity 전략 jdbcTemplate saveAll 성공, batch insert 활성화")
-    void identity_jdbcTemplate_saveAll() {
+    @DisplayName("jdbcTemplate identity 전략 saveAll 성공, batch insert 활성화")
+    void jdbcTemplate_identity_saveAll() {
         long startTime = System.currentTimeMillis();
 
         List<Payments> paymentsList = new ArrayList<>();
@@ -125,14 +107,16 @@ class PaymentsTest {
                 .build();
             paymentsList.add(payments);
         }
-
         paymentsBulkRepository.saveAll(paymentsList);
 
+        printElapsedTime(startTime);
+    }
+
+    private void printElapsedTime(long startTime) {
         long endTime = System.currentTimeMillis();
         double elapsedTime = (double) (endTime - startTime) / 1000.0;
         System.out.println("---------------------------------");
-        System.out.printf("수행시간 : %f %s\n", elapsedTime, "(초)");
+        System.out.printf("수행시간 : %.3f %s\n", elapsedTime, "(초)");
         System.out.println("---------------------------------");
-
     }
 }
