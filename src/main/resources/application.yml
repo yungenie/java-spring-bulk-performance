@@ -4,7 +4,7 @@ spring:
       data-source-properties:
         rewriteBatchedStatements: true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/bulk_study?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&profileSQL=true&logger=Slf4JLogger&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3307/bulk_study?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=utf8&allowPublicKeyRetrieval=true&profileSQL=true&logger=Slf4JLogger&maxQuerySizeToLog=999999&rewriteBatchedStatements=true
     username: root
     password: 1234
   jpa:
@@ -21,7 +21,7 @@ spring:
         order_inserts: true # batch insert
 #        order_updates: true # batch update
         jdbc:
-          batch_size: 4
+          batch_size: 10000
 #          batch_versioned_data: true # batch update
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
